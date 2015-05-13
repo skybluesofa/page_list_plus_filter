@@ -62,6 +62,20 @@ class Controller extends Package
         FilterInstaller::installFilters();
     }
 
+    public function uninstall() {
+        // Setup some stuff that will make the installation work properly
+        $this->setupForFilterInstallation();
+
+        // Running this method will refresh all filters for installed packages.
+        // Since this package is no longer installed, it's filters are deleted.
+        $package = $this->getByID($this->getPackageID());
+        FilterInstaller::uninstallFilters($package);
+
+        // Uninstall the package
+        parent::uninstall();
+
+    }
+
     private function installAttributes(Package $package)
     {
         // Install a generic attribute type and associate it with Collections.
