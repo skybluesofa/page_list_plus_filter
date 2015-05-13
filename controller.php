@@ -31,25 +31,40 @@ class Controller extends Package
 
     public function install()
     {
+        // Setup some stuff that will make the installation work properly
         $this->setupForFilterInstallation();
+
+        // Install the package and get a reference to it
         $package = parent::install();
+
+        // Run some code that will install the preview attributes
         $this->installAttributes($package);
 
-        FilterInstaller::installFilters($package);
+        // This is really what we've come here for; this shows how to install
+        // filters into Page List+
+        FilterInstaller::installFilters();
     }
 
     public function upgrade()
     {
+        // Setup some stuff that will make the installation work properly
         $this->setupForFilterInstallation();
+
+        // Upgrade the package and get a reference to it
         parent::upgrade();
         $package = $this->getByID($this->getPackageID());
+
+        // Run some code that will install the preview attributes, if they haven't already been installed
         $this->installAttributes($package);
 
-        FilterInstaller::installFilters($package);
+        // This is really what we've come here for; this shows how to install
+        // filters into Page List+
+        FilterInstaller::installFilters();
     }
 
     private function installAttributes(Package $package)
     {
+        // Install a generic attribute type and associate it with Collections.
         $this->installAttributeTypes($package);
         $this->associateAttributesWithCollection($package);
         $this->installCollectionAttributes($package);
@@ -105,17 +120,15 @@ class Controller extends Package
         }
     }
 
-    protected static $collectionAttributes = array(
-        'street_address' => array('name' => 'Street Address', 'type' => 'address', 'properties' => array('akIsSearchable' => 1, 'akIsSearchableIndexed' => 1))
-    , 'address_coordinates' => array('name' => 'Coordinates', 'type' => 'coordinates', 'properties' => array('akIsSearchable' => 1, 'akIsSearchableIndexed' => 1))
-    );
-
     private function setupForFilterInstallation()
     {
         $this->registerFilterInstaller();
         $this->excludeFilesFromAnnotationChecks();
     }
 
+    /*
+     * We ran into some issues when Page List+ wasn't installed first. This resolves that issue.
+     */
     private function excludeFilesFromAnnotationChecks()
     {
         $th = \Core::make("helper/text");
@@ -127,6 +140,9 @@ class Controller extends Package
         $driver->addExcludePaths($excludePaths);
     }
 
+    /*
+     * Sometimes, the FilterInstaller class isn't loaded in Symfony. This fixes that.
+     */
     private function registerFilterInstaller()
     {
         $symfonyLoader = new SymfonyMapClassloader(array(
@@ -136,7 +152,4 @@ class Controller extends Package
         $symfonyLoader->register();
 
     }
-
 }
-
-?>

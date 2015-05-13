@@ -4,6 +4,10 @@ namespace Concrete\Package\SkybluesofaPageListPlusFilter\Attribute\PageListPlusA
 use \Concrete\Core\Attribute\DefaultController as DefaultAttributeController;
 use Loader;
 
+/*
+ * This class is really just a duplicate of the text attribute. We're just presenting it
+ * here to show how the attribute and filters interact.
+ */
 class Controller extends DefaultAttributeController
 {
 
