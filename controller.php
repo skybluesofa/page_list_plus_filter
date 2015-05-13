@@ -65,6 +65,8 @@ class Controller extends Package
     private function installAttributes(Package $package)
     {
         // Install a generic attribute type and associate it with Collections.
+        
+        // I prefer to put this in a separate class, but I'm trying to keep things as simple as possible.
         $this->installAttributeTypes($package);
         $this->associateAttributesWithCollection($package);
         $this->installCollectionAttributes($package);
